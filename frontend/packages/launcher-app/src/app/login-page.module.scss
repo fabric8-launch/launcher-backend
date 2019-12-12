@@ -1,5 +1,10 @@
 $assetPath: "./assets/logo";
 
+.main {
+  background-color: #fff;
+  margin:-20px
+}
+
 .intro {
   background-image: url(#{$assetPath}/background.png);
   background-size: cover;
@@ -76,7 +81,7 @@ button.loginButton {
   button.loginButton {
     font-size: 10pt;
   }
-  
+
   .container {
     margin-top: 0;
     display: initial;

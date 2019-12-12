@@ -1,11 +1,12 @@
 package io.fabric8.launcher.service.openshift.api;
 
-import javax.annotation.Nullable;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.fabric8.launcher.base.Paths;
 import org.immutables.value.Value;
+
+import javax.annotation.Nullable;
 
 /**
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
@@ -30,4 +31,9 @@ public interface OpenShiftCluster {
 
     @Nullable
     String getConsoleUrl();
+
+    @Value.Default
+    default String getOauthUrl() {
+        return Paths.join(getApiUrl(), "/oauth/authorize");
+    }
 }

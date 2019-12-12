@@ -3,18 +3,18 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthenticationApiContext, useAuthenticationApiStateProxy } from '../auth/auth-context';
-import { AuthRouter, newAuthApi } from '../auth/authentication-api-factory';
+import { newAuthApi } from '../auth/authentication-api-factory';
 import { createRouterLink, getRequestedRoute, useRouter } from '../router/use-router';
 import { authConfig, authMode, creatorApiUrl, launcherApiUrl, publicUrl } from './config';
 import './launcher-app.scss';
 import { Layout } from './layout';
-import { LoginPage } from './login-page';
 import { LauncherMenu } from '../launcher/launcher';
 import { CreateNewAppFlow } from '../flows/create-new-app-flow';
 import { ImportExistingFlow } from '../flows/import-existing-flow';
 import { DeployExampleAppFlow } from '../flows/deploy-example-app-flow';
 import { DataLoader } from '@launcher/component';
 import { LauncherDepsProvider } from '../contexts/launcher-client-provider';
+import { LoginPage } from './login-page';
 
 
 function Routes(props: {}) {
@@ -42,11 +42,12 @@ function Routes(props: {}) {
   const DeployExampleAppFlowRoute = () => (<WithCancel>{onCancel => <DeployExampleAppFlow onCancel={onCancel} />}</WithCancel>);
   return (
     <Switch>
+      <Route path="/" exact component={LoginPage} />
       <Route path="/home" exact component={Menu} />
       <Route path="/flow/new-app" exact component={CreateNewAppFlowRoute} />
       <Route path="/flow/import-existing-app" exact component={ImportExistingFlowRoute} />
       <Route path="/flow/deploy-example-app" exact component={DeployExampleAppFlowRoute} />
-      <Redirect to="/home" />
+      <Redirect to="/" />
     </Switch>
   );
 }
@@ -78,9 +79,7 @@ export function LauncherApp() {
           creatorUrl={creatorApiUrl}
           launcherUrl={launcherApiUrl}
         >
-          <AuthRouter loginPage={LoginPage} basename={publicUrl}>
-            <HomePage />
-          </AuthRouter>
+          <HomePage />
         </LauncherDepsProvider>
       </AuthenticationApiContext.Provider>
     </DataLoader >

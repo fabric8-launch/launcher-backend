@@ -9,7 +9,7 @@ export interface OpenshiftConfig {
   loadGitProvider: () => Promise<GitProviderConfig>,
   openshift: {
     clientId: string;
-    url: string;
+    url?: string;
     validateTokenUri: string;
     responseType?: string;
   };

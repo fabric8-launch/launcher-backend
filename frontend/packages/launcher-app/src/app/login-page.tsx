@@ -1,21 +1,22 @@
 import { Button, Card, CardBody, CardFooter, CardHeader, PageSection, PageSectionVariants, Text, TextContent, TextVariants } from '@patternfly/react-core';
 import { ExternalLinkSquareAltIcon } from '@patternfly/react-icons';
 import * as React from 'react';
-import { useAuthenticationApi } from '../auth/auth-context';
-import { Layout } from './layout';
 import style from './login-page.module.scss';
 import { NewAppRuntimesLoader } from '../loaders/new-app-runtimes-loaders';
 import { PropertyValue } from '../client/types';
+import { useRouter, createRouterLink } from '../router/use-router';
 
 function LoginCard() {
-  const auth = useAuthenticationApi();
+  const router = useRouter();
+  const homeLink = createRouterLink(router, '/home');
+
   return (
     <div className={style.loginCard}>
       <p className={style.loginText}>
         When you click on start, you will first have to login or register an account for free
         with the Red Hat Developer Program.
       </p>
-      <Button variant="primary" onClick={auth.login} className={style.loginButton}>
+      <Button variant="primary" onClick={homeLink.onClick} className={style.loginButton}>
         Start
       </Button>
     </div>
@@ -41,7 +42,7 @@ function Runtime(props: RuntimeProps) {
 }
 
 export const LoginPage = () => (
-  <Layout>
+  <div className={style.main}>
     <section className={style.intro}>
       <div className="container">
         <h1 className={style.mainTitle}>Launcher</h1>
@@ -70,5 +71,5 @@ export const LoginPage = () => (
         {runtimes => runtimes.map(r => (<Runtime {...r} key={r.id} />))}
       </NewAppRuntimesLoader>
     </PageSection>
-  </Layout>
+  </div>
 );

@@ -4,6 +4,7 @@ import { useAuthorizationManager } from '../contexts/authorization-context';
 import { OpenshiftClusterLoader, OpenshiftClustersLoader } from '../loaders/openshiftcluster-loader';
 import { ClusterPicker, ClusterPickerValue } from '../pickers/cluster-picker';
 import { FormHub, SpecialValue, FormPanel, DescriptiveHeader, OverviewEmpty, OverviewComplete, ExternalLink } from '@launcher/component';
+import { useAuthenticationApi } from '../auth/auth-context';
 
 export interface DeploymentFormValue {
   clusterPickerValue?: ClusterPickerValue;
@@ -14,6 +15,18 @@ export const DeploymentHub: FormHub<DeploymentFormValue> = {
   title: 'OpenShift Deployment',
   checkCompletion: value => !!value.clusterPickerValue && ClusterPicker.checkCompletion(value.clusterPickerValue),
   Overview: props => {
+    const authApi = useAuthenticationApi();
+    if (!authApi.user && authApi.enabled) {
+      return (
+        <OverviewEmpty
+        id={DeploymentHub.id}
+        title="You need to login for OpenShift deployment"
+        action={<Button variant="primary" onClick={authApi.login}>Login</Button>}
+      >
+        When you are logged in we can deploy this application on your cluster.
+      </OverviewEmpty>
+      );
+    }
     if (!DeploymentHub.checkCompletion(props.value)) {
       return (
         <OverviewEmpty

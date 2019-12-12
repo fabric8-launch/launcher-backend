@@ -120,7 +120,7 @@ export class KeycloakAuthenticationApi implements AuthenticationApi {
 
   public generateAuthorizationLink = (provider: string = this.config.gitProvider, redirect?: string): string => {
     if (!this.user) {
-      throw new Error('User is not authenticated');
+      return '';
     }
     if (this.user.accountLink[provider]) {
       return this.user.accountLink[provider];

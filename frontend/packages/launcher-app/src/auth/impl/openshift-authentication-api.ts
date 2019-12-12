@@ -27,11 +27,13 @@ export class OpenshiftAuthenticationApi implements AuthenticationApi {
     if (this._user) {
       openshiftAuthorizations = this._user.authorizationsByProvider.openshift;
     } else {
-      const params = this.parseQuery(window.location.hash.substring(1));
       openshiftAuthorizations = {
-        [AUTH_HEADER_KEY]: FAKE_AUTH_HEADER,
-        [OPENSHIFT_AUTH_HEADER_KEY]: `Bearer ${params.access_token}`,
+        [AUTH_HEADER_KEY]: FAKE_AUTH_HEADER
       };
+      const params = this.parseQuery(window.location.hash.substring(1));
+      if (params.access_token) {
+        openshiftAuthorizations[OPENSHIFT_AUTH_HEADER_KEY] = `Bearer ${params.access_token}`;
+      }
     }
     if (openshiftAuthorizations) {
       try {
@@ -89,16 +91,11 @@ export class OpenshiftAuthenticationApi implements AuthenticationApi {
         `${this.gitConfig.gitea!.clientId}&redirect_uri=${encodeURIComponent(this.gitConfig.gitea!.redirectUri)}`;
     }
 
-    return '';
+    return this.loginUrl(provider);
   };
 
   public login = (): void => {
-    const conf = this.config.openshift;
-    const redirect = this.cleanUrl(window.location.href);
-    const url = `${conf.url}` +
-      `?client_id=${encodeURIComponent(conf.clientId)}` +
-      `&response_type=${encodeURIComponent(conf.responseType!)}` +
-      `&redirect_uri=${encodeURIComponent(redirect)}`;
+    const url = this.loginUrl();
     window.location.assign(url);
   };
 
@@ -115,6 +112,16 @@ export class OpenshiftAuthenticationApi implements AuthenticationApi {
   public refreshToken = async (force?: boolean): Promise<OptionalUser> => {
     return this._user;
   };
+
+  private loginUrl(baseUrl?: string) {
+    const conf = this.config.openshift;
+    const redirect = this.cleanUrl(window.location.href);
+    const url = `${baseUrl || conf.url}` +
+      `?client_id=${encodeURIComponent(conf.clientId)}` +
+      `&response_type=${encodeURIComponent(conf.responseType!)}` +
+      `&redirect_uri=${encodeURIComponent(redirect)}`;
+    return url;
+  }
 
   get user() {
     return this._user;

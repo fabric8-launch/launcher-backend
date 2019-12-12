@@ -112,7 +112,7 @@ export function LaunchFlow(props: LaunchFlowProps) {
   const [run, setRun] = useState<RunState>({status: Status.EDITION, statusMessages: []});
   const client = useLauncherClient();
   const analytics = useAnalytics();
-  
+
   useEffect(() => analytics.event('Flow', 'Open', props.id), [analytics, props.id]);
 
   const canDownload = props.canDownload === undefined || props.canDownload;

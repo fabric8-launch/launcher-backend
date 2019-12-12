@@ -5,6 +5,7 @@ import { GitInfoLoader } from '../loaders/git-info-loader';
 import { Button } from '@patternfly/react-core';
 import { useAuthorizationManager } from '../contexts/authorization-context';
 import { ButtonLink, FormPanel, DescriptiveHeader, OverviewEmpty, optionalBool, FormHub, OverviewComplete, SpecialValue } from '@launcher/component';
+import { useAuthenticationApi } from '../auth/authentication-api-factory';
 
 export interface DestRepositoryFormValue {
   userRepositoryPickerValue?: UserRepositoryPickerValue;
@@ -18,12 +19,15 @@ export const DestRepositoryHub: FormHub<DestRepositoryFormValue> = {
     && !!value.userRepositoryPickerValue && UserRepositoryPicker.checkCompletion(value.userRepositoryPickerValue),
   Overview: props => {
     const auth = useAuthorizationManager();
+    const authApi = useAuthenticationApi();
     if (!optionalBool(props.value.isProviderAuthorized, true)) {
       return (
         <OverviewEmpty
           id={`${DestRepositoryHub.id}-unauthorized`}
           title="You need to authorize Git."
-          action={<ButtonLink href={auth.generateAuthorizationLink()}>Authorize</ButtonLink>}
+          action={(authApi.user === undefined ?
+            <Button variant="primary" onClick={authApi.login}>Login</Button> :
+            <ButtonLink href={auth.generateAuthorizationLink()}>Authorize</ButtonLink>)}
         >
           Once authorized, you will be able to choose a repository provider and a location...
         </OverviewEmpty>
@@ -67,7 +71,7 @@ export const DestRepositoryHub: FormHub<DestRepositoryFormValue> = {
                   <UserRepositoryPicker.Element
                     gitInfo={gitInfo}
                     value={inputProps.value.userRepositoryPickerValue || {}}
-                    onChange={(userRepositoryPickerValue) => inputProps.onChange({...inputProps.value, userRepositoryPickerValue})}
+                    onChange={(userRepositoryPickerValue) => inputProps.onChange({ ...inputProps.value, userRepositoryPickerValue })}
                   />
                 )}
               </GitInfoLoader>

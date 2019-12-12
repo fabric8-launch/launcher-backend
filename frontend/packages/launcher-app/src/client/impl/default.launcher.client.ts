@@ -146,8 +146,7 @@ export default class DefaultLauncherClient implements LauncherClient {
     }
   }
   public async ocClusters(): Promise<OpenShiftCluster[]> {
-    const authorizations = await this.requireOpenShiftAuthorizations();
-    const requestConfig = await this.getRequestConfig({ authorizations });
+    const requestConfig = await this.getRequestConfig();
     try {
       const r = await this.httpService.get<any>(this.config.launcherURL, '/services/openshift/clusters', requestConfig);
       return r.map(c => ({
