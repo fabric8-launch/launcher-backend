@@ -33,7 +33,7 @@
     <version.cache2k>1.2.4.Final</version.cache2k>
     <version.commons.codec>1.13</version.commons.codec>
     <version.commons.compress>1.19</version.commons.compress>
-    <version.commons.io>2.6</version.commons.io>
+    <version.commons.io>2.7</version.commons.io>
     <version.commons.lang3>3.9</version.commons.lang3>
     <version.commons.text>1.8</version.commons.text>
     <version.snakeyaml>1.25</version.snakeyaml>
