@@ -23,7 +23,7 @@
     <version.quarkus>1.3.2.Final</version.quarkus>
     <version.maven-model-helper>13</version.maven-model-helper>
 
-    <version.httpclient>4.5.10</version.httpclient>
+    <version.httpclient>4.5.13</version.httpclient>
     <version.failsafe>2.3.1</version.failsafe>
     <version.github.api>1.95</version.github.api>
     <version.jwt>3.8.2</version.jwt>
